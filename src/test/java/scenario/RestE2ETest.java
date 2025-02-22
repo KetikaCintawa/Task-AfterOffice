@@ -1,102 +1,127 @@
 package scenario;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.apiautomation.model.ResponseItem;
+import restassured.models.ResponseItem;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-
-import static io.restassured.RestAssured.*;
+import io.restassured.specification.RequestSpecification;
+import restassured.models.ResponseObject;
 
 public class RestE2ETest {
 
     ResponseItem responseItem;
 
+    private static final String BASE_URL = "https://api.restful-api.dev";
+    private static final String OBJECTS_ENDPOINT = "/objects";
+    private String idObject; 
+
+    
     /*
-     * Scenario e2e test
-     * 1. Hit add products (verify response)
-     * 2. Hit get Products (verify response)
-     * 3. Hit update product (verify response)
-     */
+     * Scenario Add Object
+     * Create new object (hit API add_object)
+     * Verify new object is added (hit API single_object)
+     * Delete product (hit API delete_object)
+     * Verify new object is deleted (hit API single_object)
+     */ 
+
+     
+    @BeforeClass
+    public void setup() {
+        RestAssured.baseURI = BASE_URL;
+    }
 
     @Test
     public void scenarioE2ETest(){
-        String json = "{\n" + //
-                          "  \"id\": 1,\n" + //
-                          "  \"title\": \"Le minerale\",\n" + //
-                          "  \"description\": \"The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.\",\n" + //
-                          "  \"category\": \"food\",\n" + //
-                          "  \"price\": 10000,\n" + //
-                          "  \"discountPercentage\": 5,\n" + //
-                          "  \"rating\": 5,\n" + //
-                          "  \"stock\": 15,\n" + //
-                          "  \"tags\": [\n" + //
-                          "    \"beauty\",\n" + //
-                          "    \"mascara\"\n" + //
-                          "  ],\n" + //
-                          "  \"dimensions\": {\n" + //
-                          "    \"width\": 23.17,\n" + //
-                          "    \"height\": 14.43,\n" + //
-                          "    \"depth\": 28.01\n" + //
-                          "  }\n" + //
-                          "}";
-        // Add product
-        RestAssured.baseURI = "https://dummyjson.com";
+        String json = "{\r\n" +
+                "    \"name\": \"Apple MacBook Pro 16\",\r\n" +
+                "    \"data\": {\r\n" +
+                "        \"year\": 2019,\r\n" +
+                "        \"price\": 1849.99,\r\n" +
+                "        \"CPU model\": \"Intel Core i9\",\r\n" +
+                "        \"Hard disk size\": \"1 TB\"\r\n" +
+                "    }\r\n" +
+                "}";
 
+        // 1. Create new object
+        RequestSpecification requestSpecification = RestAssured
+                                                    .given();
+        Response response = requestSpecification
+                .log()
+                .all()
+                .pathParam("path", "objects")
+                .body(json)
+                .contentType(ContentType.JSON)
+                .when()
+                    .post("{path}");
 
-        Response response = given()
-                            .log()
-                            .all()
-                            .pathParam("path", "products")
-                            .pathParam("method", "add")
-                            .body(json)
-                            .contentType("application/json")
-                            .when()
-                                .post("{path}/{method}");
-        System.out.println("add product" + response.asPrettyString());
+        System.out.println("Response API: " + response.asPrettyString());
+
         JsonPath addJsonPath = response.jsonPath();
-
         responseItem = addJsonPath.getObject("", ResponseItem.class);
 
-        Assert.assertEquals(response.statusCode(), 201);
-        Assert.assertEquals(responseItem.title,"Le minerale");
-        Assert.assertEquals(responseItem.price,10000);
-        Assert.assertEquals(responseItem.discountPercentage, 5);
-        Assert.assertEquals(responseItem.stock, 15);
-        Assert.assertEquals(responseItem.category, "food");
+        Assert.assertEquals(response.getStatusCode(), 200, "Failed to create object");
+        Assert.assertEquals(responseItem.name, "Apple MacBook Pro 16");
+        Assert.assertNotNull(responseItem.createdAt);
+        Assert.assertNotNull(responseItem.id);
+        Assert.assertEquals(responseItem.data.year, 2019);
+        Assert.assertEquals(responseItem.data.price, 1849.99);
+        Assert.assertEquals(responseItem.data.cpuModel, "Intel Core i9");
+        Assert.assertEquals(responseItem.data.hardDiskSize, "1 TB");
 
+        idObject = responseItem.id;
 
-        String idObject = responseItem.id;
+        // 2. Verify new object is added 
+        Response getResponse = requestSpecification
+                .log()
+                .all()
+                .pathParam("path", "objects")
+                .pathParam("id", idObject)
+                .when()
+                    .get("{path}/{id}");
 
-        //Get Product
-        Response response2 = given()
-                                .pathParam("path", "products")
-                                .pathParam("idProduct", idObject)
-                                .log()
-                                .all()
-                            .when()
-                                .get("{path}/{idProduct}");
-        System.out.println("response2" + response2.asPrettyString());
+        System.out.println("Get Response API: " + getResponse.asPrettyString());
 
-        //validation POJO
+        Assert.assertEquals(getResponse.getStatusCode(), 200, "Failed to fetch object by ID");
 
-        //Update Product
-        Response responseUpdate = given()
-                            .log()
-                            .all()
-                            .pathParam("path", "products")
-                            .pathParam("idProduct", idObject)
-                            .body(json)
-                            .contentType("application/json")
-                            .when()
-                                .put("{path}/{idProduct}");
-        System.out.println("update product" + responseUpdate.asPrettyString());
+        ResponseObject fetchedObject = getResponse.as(ResponseObject.class);
 
-        //Validation POJO
+        Assert.assertEquals(fetchedObject.id, idObject, "Object ID does not match");
+        Assert.assertEquals(fetchedObject.name, "Apple MacBook Pro 16", "Object name does not match");
 
+        // 3. Delete product
+        Response deleteResponse = requestSpecification
+            .log()
+            .all()
+            .pathParam("path", "objects")
+            .pathParam("id", idObject) 
+            .when()
+                .delete("{path}/{id}");
+
+        System.out.println("Response API: " + deleteResponse.asPrettyString());
+
+        Assert.assertEquals(response.getStatusCode(), 200, "Failed to delete object");
+
+        // 4. Verify new object is deleted
+        Response verifyDeleteResponse = requestSpecification
+            .log()
+            .all()
+            .pathParam("path","objects")
+            .pathParam("id", idObject)
+            .when()
+                .get("{path}/{id}");
+
+        System.out.println("Verify Delete Response API:" + verifyDeleteResponse.asPrettyString());
+
+        Assert.assertEquals(verifyDeleteResponse.getStatusCode(), 404, "Object was not deleted");
+    }
+
+    
     }
 
 
@@ -126,4 +151,4 @@ public class RestE2ETest {
      */
 
      
-}
+

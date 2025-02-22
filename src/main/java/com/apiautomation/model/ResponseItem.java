@@ -39,4 +39,7 @@ public class ResponseItem {
 
     @JsonProperty("category")
     public String category;
+
+    @JsonProperty("Capacity")
+    public String capacity;
 }
