@@ -5,7 +5,9 @@ import java.util.Map;
 import org.testng.Assert;
 
 import com.apiautomation.model.ResponseItem;
+import com.apiautomation.model.ResponseObject;
 import com.apiautomation.model.request.RequestItem;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,12 +20,13 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import resources.DataRequest;
+import restassured.models.ResponseObject;
 
 public class StepDefenitionsImpl {
     /*
-     *  Given A list of products are available
-        When I add new products to etalase
-        Then The product is available
+     *  Given A list of objects are available
+        When I add new objects to etalase
+        Then The objects is available
      */
     ResponseItem responseItem;
     RequestItem requestItem;
@@ -31,11 +34,12 @@ public class StepDefenitionsImpl {
     String json;
     int idProduct;
 
-    @Given("A list of products are available")
-    public void getAllProducts(){
+
+    @Given("A list of objects are available")
+    public void getAllObjects(){
         //Implementation
-        System.out.println("getAllProducts");
-        RestAssured.baseURI = "https://dummyjson.com";
+        System.out.println("getAllObjects");
+        RestAssured.baseURI = "https://api.restful-api.dev";
         RequestSpecification requestSpecification = RestAssured
                                                     .given();
 
@@ -43,170 +47,110 @@ public class StepDefenitionsImpl {
                                 .log()
                                 .all()
                             .when()
-                                .get("products");
+                                .get("objects");
         System.out.println("reponse" + response2.asPrettyString());
     }
 
-    @When("I add new products to etalase")
+    @When("I add new objects to etalase")
     public void addNewProduct(){
          //Implementation
-         System.out.println("Add new product");
-         String json = "{\n" + //
-                          "  \"id\": 1,\n" + //
-                          "  \"title\": \"Le minerale\",\n" + //
-                          "  \"description\": \"The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.\",\n" + //
-                          "  \"category\": \"food\",\n" + //
-                          "  \"price\": 10000,\n" + //
-                          "  \"discountPercentage\": 5,\n" + //
-                          "  \"rating\": 5,\n" + //
-                          "  \"stock\": 15,\n" + //
-                          "  \"tags\": [\n" + //
-                          "    \"beauty\",\n" + //
-                          "    \"mascara\"\n" + //
-                          "  ],\n" + //
-                          "  \"dimensions\": {\n" + //
-                          "    \"width\": 23.17,\n" + //
-                          "    \"height\": 14.43,\n" + //
-                          "    \"depth\": 28.01\n" + //
-                          "  }\n" + //
-                          "}";
+        System.out.println("Add new objects to etalase");
+        String json = "{\r\n" +
+                "    \"name\": \"Apple MacBook Pro 16\",\r\n" +
+                "    \"data\": {\r\n" +
+                "        \"year\": 2019,\r\n" +
+                "        \"price\": 1849.99,\r\n" +
+                "        \"CPU model\": \"Intel Core i9\",\r\n" +
+                "        \"Hard disk size\": \"1 TB\"\r\n" +
+                "    }\r\n" +
+                "}";
 
-        RestAssured.baseURI = "https://dummyjson.com";
+        RestAssured.baseURI = "https://api.restful-api.dev";
         RequestSpecification requestSpecification = RestAssured
                                                     .given();
 
         Response response = requestSpecification
                             .log()
                             .all()
-                            .pathParam("path", "products")
-                            .pathParam("method", "add")
+                            .pathParam("path", "objects")
                             .body(json)
                             .contentType("application/json")
                             .when()
-                                .post("{path}/{method}");
+                                .post("/{path}");
         System.out.println("add product" + response.asPrettyString());
 
-
         //Validation
+
         JsonPath addJsonPath = response.jsonPath();
         responseItem = addJsonPath.getObject("", ResponseItem.class);
 
-        Assert.assertEquals(response.statusCode(), 201);
-        Assert.assertEquals(responseItem.title,"Le minerale");
-        Assert.assertEquals(responseItem.price,100001);
-        Assert.assertEquals(responseItem.discountPercentage, 5);
-        Assert.assertEquals(responseItem.stock, 15);
-        Assert.assertEquals(responseItem.category, "food");
-
-        /*
-         * Simulate kalau idproduct nya kita dapat dari responseItem.id,
-         * Tapi karena id nya akan selalu sama bakanya kita modify manual
-         *  idProduct = responseItem.id;
-         */
-        idProduct = 1;
-
+        Assert.assertEquals(responseItem.name, "Apple MacBook Pro 16");
+        Assert.assertNotNull(responseItem.createdAt);
+        Assert.assertNotNull(responseItem.id);
+        Assert.assertEquals(responseItem.data.year, 2019);
+        Assert.assertEquals(responseItem.data.price, 1849.99);
+        Assert.assertEquals(responseItem.data.cpuModel, "Intel Core i9");
+        Assert.assertEquals(responseItem.data.hardDiskSize, "1 TB");
+    
     }
 
     @When("I add new {string} to etalase")
-    public void addNewProducts(String payload) throws JsonMappingException, JsonProcessingException{
-         //Implementation
+    public void addNewProductWithPayload(String payload) throws JsonMappingException, JsonProcessingException {
         dataRequest = new DataRequest();
-
-        // System.out.println("Add new product-1" + payload);
-        RestAssured.baseURI = "https://dummyjson.com";
-        RequestSpecification requestSpecification = RestAssured
-                                                    .given();
         
-        for(Map.Entry<String, String> entry : dataRequest.addItemCollection().entrySet()){
-            if (entry.getKey().equals(payload)) {
-                json = entry.getValue();
-                break;
-            }
+        RestAssured.baseURI = "https://api.restful-api.dev";
+        RequestSpecification requestSpecification = RestAssured.given();
+
+        Map<String, String> dataCollection = dataRequest.addItemCollection();
+        json = dataCollection.get(payload);
+        
+        if (json == null) {
+            throw new RuntimeException("Payload " + payload + " not found in data collection");
         }
 
         Response response = requestSpecification
-                            .log()
-                            .all()
-                            .pathParam("path", "products")
-                            .pathParam("method", "add")
-                            .body(json)
-                            .contentType("application/json")
-                            .when()
-                                .post("{path}/{method}");
-        // System.out.println("add product" + response.asPrettyString());
+            .log()
+            .all()
+            .body(json)
+            .contentType("application/json")
+            .when()
+            .post("/objects");
 
-        //Object mapper
-        /*
-         * Convert JSON to POJO
-         */
-        ObjectMapper requestAddItem = new ObjectMapper();
-        requestItem = requestAddItem.readValue(json, RequestItem.class);
+        Assert.assertEquals(response.getStatusCode(), 201);
 
-        //Validation
+        ObjectMapper mapper = new ObjectMapper();
+        requestItem = mapper.readValue(json, RequestItem.class);
+        
         JsonPath addJsonPath = response.jsonPath();
         responseItem = addJsonPath.getObject("", ResponseItem.class);
 
-        Assert.assertEquals(response.statusCode(), 201);
-        Assert.assertEquals(responseItem.title,requestItem.title);
-        Assert.assertEquals(responseItem.price,requestItem.price);
-        Assert.assertEquals(responseItem.discountPercentage, requestItem.discountPercentage);
-        Assert.assertEquals(responseItem.stock, requestItem.stock);
-        Assert.assertEquals(responseItem.category, requestItem.category);
-
+        Assert.assertEquals(responseItem.name, requestItem.name);
+        Assert.assertNotNull(responseItem.createdAt);
+        Assert.assertEquals(responseItem.data.year, requestItem.data.year);
+        Assert.assertEquals(responseItem.data.price, requestItem.data.price);
+        Assert.assertEquals(responseItem.data.cpuModel, requestItem.data.cpuModel);
+        Assert.assertEquals(responseItem.data.hardDiskSize, requestItem.data.hardDiskSize);
     }
 
-    @Then("The product is available")
-    public void getSingleProduct(){
-         //Implementation
-         System.out.println("get single product");
-          /*
-         * 'https://dummyjson.com/products/1'
-         */
+    @Then("The objects is available")
+    public void getSingleObject(){
+                //Implementation
+    System.out.println("get single object");
 
-         RestAssured.baseURI = "https://dummyjson.com";
-         RequestSpecification requestSpecification = RestAssured
-                                                     .given();
-
+    RestAssured.baseURI = "https://api.restful-api.dev";
+        RequestSpecification requestSpecification = RestAssured.given();
+    
         Response response = requestSpecification
                                 .log()
                                 .all()
-                                .pathParam("idProduct", idProduct)
-                                .pathParam("path", "products")
-                            .when()
-                                .get("{path}/{idProduct}");
-        System.out.println("ini adalah response" + response.asPrettyString());
-        //Validation
-        //-----------------*****--------------------
+                                .pathParam("idProduct", 7)
+                                .pathParam("path", "objects")
+                                .when()
+                                    .get("{path}/{idProduct}");
+    
+        System.out.println("Ini adalah response" + response.asPrettyString());
     }
 
-    @Then("I can update item {string}")
-    public void updateSingleProduct(String payload){
-        //Implementation
-        System.out.println("update single product");
-
-        for(Map.Entry<String, String> entry : dataRequest.addItemCollection().entrySet()){
-            if (entry.getKey().equals(payload)) {
-                json = entry.getValue();
-                break;
-            }
-        }
-
-        RestAssured.baseURI = "https://dummyjson.com";
-        RequestSpecification requestSpecification = RestAssured
-                                                    .given();
-
-        Response response = requestSpecification
-                            .log()
-                            .all()
-                            .pathParam("path", "products")
-                            .pathParam("idProduct", idProduct)
-                            .body(json)
-                            .contentType("application/json")
-                            .when()
-                                .put("{path}/{idProduct}");
-        System.out.println("update product" + response.asPrettyString());
-        //Validation
-        //-----------------*****--------------------
-    }
 
 }
+

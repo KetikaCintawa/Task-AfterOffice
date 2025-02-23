@@ -2,13 +2,12 @@ package restassured;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import restassured.models.ResponseObject;
+import com.apiautomation.model.ResponseObject;
 
 import java.util.List;
 

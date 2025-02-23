@@ -4,95 +4,55 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataRequest {
-    //Berisi data test
-    /*
-     * Mapping berisi 2 komponen
-     * 1. Key
-     * 2. Value
-     */
-    public Map<String, String> addItemCollection(){
+    public Map<String, String> addObjectCollection() {
         Map<String, String> dataCollection = new HashMap<>();
 
-        dataCollection.put("addItem", "{\n" + //
-                          "  \"title\": \"Le minerale\",\n" + //
-                          "  \"description\": \"The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.\",\n" + //
-                          "  \"category\": \"food\",\n" + //
-                          "  \"price\": 10000,\n" + //
-                          "  \"discountPercentage\": 5,\n" + //
-                          "  \"rating\": 5,\n" + //
-                          "  \"stock\": 15,\n" + //
-                          "  \"tags\": [\n" + //
-                          "    \"beauty\",\n" + //
-                          "    \"mascara\"\n" + //
-                          "  ],\n" + //
-                          "  \"dimensions\": {\n" + //
-                          "    \"width\": 23.17,\n" + //
-                          "    \"height\": 14.43,\n" + //
-                          "    \"depth\": 28.01\n" + //
-                          "  }\n" + //
-                          "}");
-                          
-        dataCollection.put("addItem2", "{\n" + //
-                          "  \"title\": \"Vitamin\",\n" + //
-                          "  \"description\": \"The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.\",\n" + //
-                          "  \"category\": \"food\",\n" + //
-                          "  \"price\": 20000,\n" + //
-                          "  \"discountPercentage\": 5,\n" + //
-                          "  \"rating\": 5,\n" + //
-                          "  \"stock\": 15,\n" + //
-                          "  \"tags\": [\n" + //
-                          "    \"beauty\",\n" + //
-                          "    \"mascara\"\n" + //
-                          "  ],\n" + //
-                          "  \"dimensions\": {\n" + //
-                          "    \"width\": 23.17,\n" + //
-                          "    \"height\": 14.43,\n" + //
-                          "    \"depth\": 28.01\n" + //
-                          "  }\n" + //
-                          "}");
+        dataCollection.put("addObject", "{\n" +
+                "  \"name\": \"Apple MacBook Pro 16\",\n" +
+                "  \"data\": {\n" +
+                "    \"year\": 2019,\n" +
+                "    \"price\": 1849.99,\n" +
+                "    \"CPU model\": \"Intel Core i9\",\n" +
+                "    \"Hard disk size\": \"1 TB\"\n" +
+                "  }\n" +
+                "}");
+
+        dataCollection.put("addObject2", "{\n" +
+                "  \"name\": \"Dell XPS 13\",\n" +
+                "  \"data\": {\n" +
+                "    \"year\": 2021,\n" +
+                "    \"price\": 1499.99,\n" +
+                "    \"CPU model\": \"Intel Core i7\",\n" +
+                "    \"Hard disk size\": \"512 GB\"\n" +
+                "  }\n" +
+                "}");
+
         return dataCollection;
     }
 
-    public Map<String, String> updateItemCollection(){
+    public Map<String, String> updateObjectCollection() {
         Map<String, String> dataCollection = new HashMap<>();
 
-        dataCollection.put("updateItem", "{\n" + //
-                          "  \"title\": \"Le minerale\",\n" + //
-                          "  \"description\": \"The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.\",\n" + //
-                          "  \"category\": \"food\",\n" + //
-                          "  \"price\": 10000,\n" + //
-                          "  \"discountPercentage\": 5,\n" + //
-                          "  \"rating\": 5,\n" + //
-                          "  \"stock\": 15,\n" + //
-                          "  \"tags\": [\n" + //
-                          "    \"beauty\",\n" + //
-                          "    \"mascara\"\n" + //
-                          "  ],\n" + //
-                          "  \"dimensions\": {\n" + //
-                          "    \"width\": 23.17,\n" + //
-                          "    \"height\": 14.43,\n" + //
-                          "    \"depth\": 28.01\n" + //
-                          "  }\n" + //
-                          "}");
-                          
-        dataCollection.put("updateItem2", "{\n" + //
-                          "  \"title\": \"Vitamin\",\n" + //
-                          "  \"description\": \"The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.\",\n" + //
-                          "  \"category\": \"food\",\n" + //
-                          "  \"price\": 20000,\n" + //
-                          "  \"discountPercentage\": 5,\n" + //
-                          "  \"rating\": 5,\n" + //
-                          "  \"stock\": 15,\n" + //
-                          "  \"tags\": [\n" + //
-                          "    \"beauty\",\n" + //
-                          "    \"mascara\"\n" + //
-                          "  ],\n" + //
-                          "  \"dimensions\": {\n" + //
-                          "    \"width\": 23.17,\n" + //
-                          "    \"height\": 14.43,\n" + //
-                          "    \"depth\": 28.01\n" + //
-                          "  }\n" + //
-                          "}");
+        dataCollection.put("updateObject", "{\n" +
+                "  \"name\": \"Apple MacBook Pro 16\",\n" +
+                "  \"data\": {\n" +
+                "    \"year\": 2020,\n" +
+                "    \"price\": 1999.99,\n" +
+                "    \"CPU model\": \"Intel Core i9\",\n" +
+                "    \"Hard disk size\": \"1 TB\"\n" +
+                "  }\n" +
+                "}");
+
+        dataCollection.put("updateObject2", "{\n" +
+                "  \"name\": \"Dell XPS 13\",\n" +
+                "  \"data\": {\n" +
+                "    \"year\": 2022,\n" +
+                "    \"price\": 1599.99,\n" +
+                "    \"CPU model\": \"Intel Core i7\",\n" +
+                "    \"Hard disk size\": \"1 TB\"\n" +
+                "  }\n" +
+                "}");
+
         return dataCollection;
     }
 }
