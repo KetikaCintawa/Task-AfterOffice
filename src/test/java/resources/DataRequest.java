@@ -34,7 +34,7 @@ public class DataRequest {
         Map<String, String> dataCollection = new HashMap<>();
 
         dataCollection.put("updateObject", "{\n" +
-                "  \"name\": \"Apple MacBook Pro 16\",\n" +
+                "  \"name\": \"Apple MacBook Pro 16 (Updated)\",\n" +
                 "  \"data\": {\n" +
                 "    \"year\": 2020,\n" +
                 "    \"price\": 1999.99,\n" +
@@ -44,7 +44,7 @@ public class DataRequest {
                 "}");
 
         dataCollection.put("updateObject2", "{\n" +
-                "  \"name\": \"Dell XPS 13\",\n" +
+                "  \"name\": \"Dell XPS 13 (Updated)\",\n" +
                 "  \"data\": {\n" +
                 "    \"year\": 2022,\n" +
                 "    \"price\": 1599.99,\n" +

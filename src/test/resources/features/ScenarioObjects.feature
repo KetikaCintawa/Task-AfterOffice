@@ -15,13 +15,13 @@ Examples:
     |addObject  |
     |addObject2 |
 
-# Scenario Outline: As a user I can update data
-#     Given A list of objects are available
-#     When I add a new "<payload>" to the API
-#     And The object is available
-#     Then I can update object "<update>"
+Scenario Outline: As a user I can update data
+    Given A list of objects are available
+    When I add a new "<payload>" to etalase
+    And The object is available
+    Then I can update object "<update>"
     
-# Examples:
-#     |payload    | update        | 
-#     |addObject  | updateObject  |
-#     |addObject2 | updateObject2 |
+Examples:
+    |payload    | update        | 
+    |addObject  | updateObject  |
+    |addObject2 | updateObject2 |
