@@ -1,42 +1,37 @@
 package com.apiautomation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseItem {
-
-    /*
-     * {
-            "id": 195,
-            "title": "Essence Mascara Lash Princess",
-            "price": 9.99,
-            "discountPercentage": 7.17,
-            "stock": 5,
-            "rating": 4.94,
-            "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
-            "category": "beauty"
-        }
-     */
     @JsonProperty("id")
     public String id;
 
-    @JsonProperty("title")
-    public String title;
+    @JsonProperty("name")
+    public String name;
 
-    @JsonProperty("price")
-    public int price;
+    @JsonProperty("data")
+    public DataItem data; 
 
-    @JsonProperty("discountPercentage")
-    public int discountPercentage;
+    @JsonProperty("createdAt")
+    public String createdAt;
 
-    @JsonProperty("stock")
-    public int stock;
+    @JsonProperty("updatedAt")
+    public String updatedAt;
 
-    @JsonProperty("rating")
-    public int rating;
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class DataItem {
+        @JsonProperty("year")
+        public int year;
 
-    @JsonProperty("description")
-    public String description;
+        @JsonProperty("price")
+        public double price;
 
-    @JsonProperty("category")
-    public String category;
+        @JsonProperty("CPU model")
+        public String cpuModel;
+
+        @JsonProperty("Hard disk size")
+        public String hardDiskSize;
+    }
 }

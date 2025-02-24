@@ -1,34 +1,10 @@
 package com.apiautomation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseObject {
-    /*
-     * {
-        "id": "7",
-        "name": "Apple MacBook Pro 16",
-        "data": [{
-            "year": 2019,
-            "price": 1849.99,
-            "CPU model": "Intel Core i9",
-            "Hard disk size": "1 TB"
-        },
-        "year": 2019,
-            "price": 1849.99,
-            "CPU model": "Intel Core i9",
-            "Hard disk size": "1 TB"
-        },
-        "year": 2019,
-            "price": 1849.99,
-            "CPU model": "Intel Core i9",
-            "Hard disk size": "1 TB"
-        }]
-        "createdAt": "2022-11-21T20:06:23.986Z"
-        }
-     */
-
-     
-
     @JsonProperty("id")
     public String id;
 
@@ -36,17 +12,21 @@ public class ResponseObject {
     public String name;
 
     @JsonProperty("data")
-    public DataItem dataItem;
+    public DataItem data; 
 
     @JsonProperty("createdAt")
     public String createdAt;
 
-    public class DataItem{
+    @JsonProperty("updatedAt")
+    public String updatedAt;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class DataItem {
         @JsonProperty("year")
         public int year;
 
         @JsonProperty("price")
-        public int price;
+        public double price;
 
         @JsonProperty("CPU model")
         public String cpuModel;
