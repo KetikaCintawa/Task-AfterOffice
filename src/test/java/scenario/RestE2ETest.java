@@ -4,16 +4,16 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import restassured.models.ResponseItem;
+import com.apiautomation.model.ResponseItem;
+import com.apiautomation.model.ResponseObject;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import restassured.models.ResponseObject;
 
-public class RestE2ETest {
+public class RestE2ETest { 
 
     ResponseItem responseItem;
 

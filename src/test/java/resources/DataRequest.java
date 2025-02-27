@@ -10,9 +10,9 @@ public class DataRequest {
         dataCollection.put("addObject", "{\n" +
                 "  \"name\": \"Apple MacBook Pro 16\",\n" +
                 "  \"data\": {\n" +
-                "    \"year\": 2019,\n" +
-                "    \"price\": 1849.99,\n" +
-                "    \"CPU model\": \"Intel Core i9\",\n" +
+                "    \"year\": 2020,\n" +
+                "    \"price\": 1899.99,\n" +
+                "    \"CPU model\": \"Intel Core i3\",\n" +
                 "    \"Hard disk size\": \"1 TB\"\n" +
                 "  }\n" +
                 "}");
@@ -34,9 +34,9 @@ public class DataRequest {
         Map<String, String> dataCollection = new HashMap<>();
 
         dataCollection.put("updateObject", "{\n" +
-                "  \"name\": \"Apple MacBook Pro 16\",\n" +
+                "  \"name\": \"Apple MacBook Pro 16 (Updated)\",\n" +
                 "  \"data\": {\n" +
-                "    \"year\": 2020,\n" +
+                "    \"year\": 2025,\n" +
                 "    \"price\": 1999.99,\n" +
                 "    \"CPU model\": \"Intel Core i9\",\n" +
                 "    \"Hard disk size\": \"1 TB\"\n" +
@@ -44,11 +44,11 @@ public class DataRequest {
                 "}");
 
         dataCollection.put("updateObject2", "{\n" +
-                "  \"name\": \"Dell XPS 13\",\n" +
+                "  \"name\": \"Dell XPS 13 (Updated)\",\n" +
                 "  \"data\": {\n" +
-                "    \"year\": 2022,\n" +
-                "    \"price\": 1599.99,\n" +
-                "    \"CPU model\": \"Intel Core i7\",\n" +
+                "    \"year\": 2023,\n" +
+                "    \"price\": 1578.99,\n" +
+                "    \"CPU model\": \"Intel Core i5\",\n" +
                 "    \"Hard disk size\": \"1 TB\"\n" +
                 "  }\n" +
                 "}");
